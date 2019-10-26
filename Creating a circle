@@ -1,0 +1,41 @@
+#steps of drawing a circle based off of outer points
+import pygame                    #import pygame module
+pygame.init()                    #initiate pygame
+window = pygame.display.set_mode((900,900))
+                                 #under the display functions, set the display's mode of size as (900, by 900)
+
+start = False                    #mark that the starter point hasn't been set
+
+run = True                       #set the loop as true
+while run:                       #make the loop running
+    pygame.display.flip()        #update the entire display
+    (x,y) = pygame.mouse.get_pos()
+                                 #locate the mouse position
+    for event in pygame.event.get():
+                                 #get every pygame event, and make it labeled as event
+        if event.type == pygame.QUIT:
+                                 #if the type of event is quiting
+            run = False          #close loop
+        if event.type == pygame.MOUSEBUTTONDOWN:
+                                 #if the type of event is clicking mouse down
+            if not start:        #step 1 check if start has been marked
+                sx = x           #step 2 find the left most point of circle
+                my = y           #step 3 find the point of orgin on the y axis
+                start = True     #step 4 turn on start, marking that it has been set
+                break            #step 5 break to restart the loop
+            if start:            #step 6 if start has been set
+                ex = x           #step 7 find the right most part of the circle
+                if ex < sx:      #step 8 check if circle is made backwards
+                    temp = ex    #step 8a make a temp variable of last point
+                    ex = sx      #step 8b change last point to first point
+                    sx = temp    #step 8c change first point to last point using its temp
+                c = (sx+ex)/2    #step 9 set the center as the average of the two points
+                r = ex - c       #step 10 set the radius as the distance from the right point minus the center
+                pygame.draw.circle(window, (255,255,255), (int(c),int(my)), int(r))
+                                 #step 11 draw the circle ((on the screen), (color it white), (its center is c,my), (with a radius of r))
+                sx = None;ex = None;c = None;temp = None;my = None;r = None
+                                 #step 12 reset all variables
+                start = False    #step 13 turn off start so taht it can be set again
+                break            #step 14 break to restart the loop
+                
+pygame.quit()                    #shut down pygame entirely
